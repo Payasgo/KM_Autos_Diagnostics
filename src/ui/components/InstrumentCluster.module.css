@@ -1,0 +1,95 @@
+.cluster {
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 7px 10px 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 3.5%, transparent), 0 8px 24px color-mix(in srgb, var(--bg) 35%, transparent);
+}
+.dials { display: block; width: 100%; height: auto; max-height: 350px; }
+.clusterBezel { fill: var(--bg); stroke: var(--line-hi); stroke-width: 2; }
+.topHighlight { fill: none; stroke: color-mix(in srgb, var(--ink) 22%, transparent); stroke-width: 1.5; }
+.dialOuter { fill: var(--bg); stroke: var(--line-hi); stroke-width: 2; }
+.dialFace { fill: var(--bg); stroke: var(--panel2); stroke-width: 2; }
+.innerRing { fill: none; stroke: var(--line-hi); stroke-width: 8; }
+.tick { stroke: var(--ink-soft); stroke-width: 1.5; stroke-linecap: round; }
+.majorTick { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+.redTick { stroke: var(--danger); stroke-width: 2.8; stroke-linecap: round; }
+.scale { fill: var(--ink); font: 600 12px system-ui, sans-serif; }
+.needle { stroke: var(--cyan); stroke-width: 3.6; stroke-linecap: round; filter: drop-shadow(0 0 3px color-mix(in srgb, var(--cyan) 50%, transparent)); }
+.hub { fill: var(--ink); stroke: var(--cyan); stroke-width: 2; }
+.readout { fill: var(--ink); font: 700 31px system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.unit { fill: var(--ink-soft); font: 12px system-ui, sans-serif; }
+.dialLabel { fill: var(--ink-soft); font: 700 10px system-ui, sans-serif; letter-spacing: 1.6px; }
+.topline { fill: var(--ink); font: 700 15px system-ui, sans-serif; letter-spacing: 2px; }
+.topMeta { fill: var(--ink2); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1.5px; }
+.centerPanel { fill: var(--ink); }
+.centerCaption { fill: var(--ink2); font: 700 10px system-ui, sans-serif; letter-spacing: 1.8px; }
+.gear { fill: var(--ink); font: 700 54px system-ui, sans-serif; }
+.centerDivider { stroke: var(--line-hi); stroke-width: 1; }
+.small { fill: var(--ink-soft); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; }
+.status { fill: var(--cyan); font: 700 8px system-ui, sans-serif; letter-spacing: .3px; }
+.sideLabel { fill: var(--ink2); font: 700 9px system-ui, sans-serif; letter-spacing: 1.4px; }
+.sideValue { fill: var(--ink); font: 600 17px system-ui, sans-serif; }
+.sideUnit { fill: var(--ink2); font: 10px system-ui, sans-serif; }
+.footerLine { stroke: var(--line-hi); stroke-width: 1; }
+.footer { fill: var(--ink2); font: 700 9px system-ui, sans-serif; letter-spacing: 1.8px; }
+.statusDot { fill: var(--ok); }
+.gearStrip { display: flex; justify-content: center; gap: 7px; padding-top: 3px; }
+.gearSlot, .gearActive { display: inline-flex; align-items: center; justify-content: center; min-width: 27px; height: 24px; border: 1px solid var(--line-hi); border-radius: 5px; background: var(--bg); color: var(--ink2); font: 700 12px ui-monospace, SFMono-Regular, Consolas, monospace; }
+.gearActive { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 20%, transparent); color: var(--ink); box-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 18%, transparent); }
+@media (max-width: 700px) {
+  .cluster { padding: 4px 4px 7px; border-radius: 11px; }
+  .dials { min-height: 120px; }
+  .gearStrip { gap: 4px; }
+  .gearSlot, .gearActive { min-width: 24px; height: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .needle { filter: none; } }
+
+/* Performance-red OEM skin used by the dyno cell. The shared cluster remains
+   neutral for Live/Drag unless the caller explicitly opts into this variant. */
+.cluster[data-variant='red'] {
+  border-color: color-mix(in srgb, var(--acc) 55%, transparent);
+  background: radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--ink) 28%, transparent), transparent 62%), linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--acc) 12%, transparent), 0 0 22px color-mix(in srgb, var(--acc) 13%, transparent), 0 10px 28px color-mix(in srgb, var(--bg) 42%, transparent);
+}
+.cluster[data-variant='red'] .clusterBezel { stroke: var(--danger-line); filter: drop-shadow(0 0 7px color-mix(in srgb, var(--acc) 28%, transparent)); }
+.cluster[data-variant='red'] .topHighlight { stroke: color-mix(in srgb, var(--acc) 75%, transparent); stroke-width: 2; }
+.cluster[data-variant='red'] .dialOuter { stroke: var(--danger-line); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--acc) 22%, transparent)); }
+.cluster[data-variant='red'] .dialFace { stroke: var(--danger-bg); }
+.cluster[data-variant='red'] .innerRing { stroke: var(--danger-line); }
+.cluster[data-variant='red'] .needle { stroke: var(--acc); filter: drop-shadow(0 0 4px color-mix(in srgb, var(--acc) 75%, transparent)); }
+.cluster[data-variant='red'] .hub { fill: var(--acc-on); stroke: var(--acc); }
+.cluster[data-variant='red'] .centerDivider,
+.cluster[data-variant='red'] .footerLine { stroke: var(--danger-line); }
+.cluster[data-variant='red'] .status { fill: var(--acc-ink); }
+.cluster[data-variant='red'] .statusDot { fill: var(--acc); filter: drop-shadow(0 0 3px color-mix(in srgb, var(--acc) 75%, transparent)); }
+.cluster[data-variant='red'] .gearActive { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 20%, transparent); color: var(--acc-on); box-shadow: 0 0 12px color-mix(in srgb, var(--acc) 24%, transparent); }
+.cluster[data-variant='red'] .gearSlot { border-color: var(--danger-line); }
+.cluster[data-variant='red'] .redTick { stroke: var(--acc); filter: drop-shadow(0 0 2px color-mix(in srgb, var(--acc) 45%, transparent)); }
+.cluster[data-variant='red'] .topline { fill: var(--acc-on); }
+
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 2.5% 7px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--acc) 5.5%, transparent), transparent 70%);
+}
+.telemetryItem { min-width: 0; display: flex; align-items: baseline; justify-content: center; gap: 5px; }
+.telemetryLabel { color: var(--ink2); font: 800 9px system-ui, sans-serif; letter-spacing: 1px; }
+.telemetryValue { overflow: hidden; color: var(--ink); font: 700 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+.telemetryValue small { margin-left: 3px; color: var(--ink2); font: 500 9px system-ui, sans-serif; }
+.cluster[data-variant='red'] .telemetry { border-color: color-mix(in srgb, var(--acc) 25%, transparent); }
+.cluster[data-variant='red'] .telemetryValue { color: var(--acc-on); }
+@media (max-width: 700px) {
+  .telemetry { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 3px; padding: 7px 4px; }
+  .telemetryItem { gap: 3px; }
+  .telemetryLabel { font-size: 8px; letter-spacing: .4px; }
+  .telemetryValue { font-size: 10px; }
+}

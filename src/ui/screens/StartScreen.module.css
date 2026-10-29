@@ -1,0 +1,134 @@
+.screen {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--sp-xl) var(--sp-xl) var(--sp-xxl);
+  overflow-x: hidden;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  text-align: center;
+}
+
+.glow {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 760px;
+  height: 760px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--acc-rgb), 0.22) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.inner { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 980px; }
+
+.logo {
+  width: min(78vw, 400px);
+  height: auto;
+  filter: drop-shadow(0 0 30px color-mix(in srgb, var(--acc) 50%, transparent));
+}
+
+.motto {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  font-style: italic;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* 24px/32px are not on the font-size scale: the app's one hero headline, sized as its
+   own editorial choice rather than a repeating text role. */
+.title {
+  max-width: 24ch;
+  margin: 18px 0 10px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.blurb { max-width: 46ch; margin-bottom: 24px; font-size: var(--fs-base); line-height: 1.6; color: var(--ink2); }
+
+.actions { display: grid; gap: 12px; width: 100%; max-width: 360px; }
+
+.way {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--sp-lg);
+  border: 1px solid var(--line-hi);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.way[data-primary] {
+  border-color: var(--acc);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--acc) 22%, var(--panel)), var(--panel));
+  box-shadow: 0 0 26px color-mix(in srgb, var(--acc) 38%, transparent);
+}
+
+.wayIcon { align-self: center; color: var(--acc-ink); }
+
+.caption { font-size: var(--fs-xs); line-height: 1.4; color: var(--ink2); }
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 26px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.services li {
+  padding: 5px 12px;
+  border: 1px solid var(--line-hi);
+  border-bottom: 2px solid var(--acc);
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 20px;
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+.contact a, .contact span { display: inline-flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; }
+.contact a:hover { color: var(--acc-ink); }
+.contact svg { color: var(--acc); }
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink2);
+}
+.version { font-family: var(--mono); }
+.website { color: var(--acc-ink); text-decoration: none; }
+.website:hover { text-decoration: underline; }
+
+/* 560px is the project's one breakpoint — see tokens.css. Wide enough, the three ways
+   in sit in a row. */
+@media (min-width: 560px) {
+  .title { font-size: 32px; }
+  .logo { width: 440px; }
+  .actions { grid-template-columns: repeat(3, 1fr); max-width: 860px; }
+}

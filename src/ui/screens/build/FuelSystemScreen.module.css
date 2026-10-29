@@ -1,0 +1,31 @@
+/* BUILD > Fuel System. */
+
+.label {
+  margin-bottom: 6px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink2);
+}
+
+.labelSpaced {
+  margin: 10px 0 6px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink2);
+}
+
+/* Prose emphasis inside the ExpandableInfo panel. */
+.em { color: var(--ink); }
+.emAcc { color: var(--acc-ink); }
+
+.slider {
+  width: 100%;
+  accent-color: var(--acc);
+  margin-bottom: 8px;
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: var(--fs-xs);
+  color: var(--ink2);
+}

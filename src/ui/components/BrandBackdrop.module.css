@@ -1,0 +1,51 @@
+/* Colours come from the tokens only (tests/no-hardcoded-colours.test.js). */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(110% 70% at 85% -5%, color-mix(in srgb, var(--acc) 26%, transparent), transparent 62%),
+    radial-gradient(90% 60% at 0% 105%, color-mix(in srgb, var(--acc) 18%, transparent), transparent 60%),
+    var(--bg);
+}
+
+.hex {
+  position: absolute;
+  inset: 0;
+  background: url('../../assets/brand/hex.webp') 0 0 / 84px 97px;
+  opacity: 0.2;
+  mask-image: radial-gradient(ellipse at 70% 25%, black 0%, transparent 78%);
+}
+
+/* The horse and speedometer: large, faded out at the foot so the crop under the
+   flames never shows. */
+.horse {
+  position: absolute;
+  top: 3%;
+  right: -8%;
+  width: min(130vw, 1200px);
+  opacity: 0.26;
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+
+.streakA,
+.streakB {
+  position: absolute;
+  left: -20%;
+  width: 140%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--acc), transparent);
+  box-shadow: 0 0 22px 2px var(--acc);
+  opacity: 0.38;
+  transform: rotate(-12deg);
+}
+.streakA { bottom: 16%; }
+.streakB { bottom: 11%; opacity: 0.2; transform: rotate(-12deg) scaleX(0.8); }
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 35%, color-mix(in srgb, var(--bg) 88%, transparent) 100%);
+}

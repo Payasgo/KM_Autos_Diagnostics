@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#070506" />
+    <meta
+      name="description"
+      content="KM Autos Diagnostics Engine Management Sandbox by KranthiKumar Yarlagadda. Design an engine, tune calibration tables, run a dyno pull, and learn engine management. Visit https://www.kmautoecm.com/."
+    />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <title>KM Autos Diagnostics — Engine Management Sandbox</title>
+    <style>
+      /* The app renders dark-on-dark and is laid out for mobile first. Set the page
+         background here so there is no white flash before React mounts. */
+      html, body { margin: 0; padding: 0; background: #070506; }
+      body { -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+      /* Every control in the app is a <button>; normalise them once, globally, rather
+         than repeating a reset in each inline style object. */
+      #root { position: relative; z-index: 1; }
+      input[type="range"] { color-scheme: dark; accent-color: #e3182d; }
+      button { font: inherit; cursor: pointer; color: inherit; }
+      button:focus-visible, [role="gridcell"]:focus-visible {
+        outline: 2px solid #e3182d;
+        outline-offset: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
