@@ -1,13 +1,9 @@
+
 name: Weekly release
 
-# Prepares a release every Thursday night, so it is ready to open on Friday morning.
-#
-# It bumps the version on a branch, pushes it, and files an issue with the notes
-# and a one-click link to open the pull request.
-# It deliberately does NOT open the PR itself.
-#
-# 02:00 UTC Friday is 22:00 Thursday US Eastern during daylight saving.
-# GitHub cron does not support timezones.
+# Prepare a release every Friday at 02:00 UTC.
+# Push a release branch and create an issue with release notes.
+# Pull requests are opened manually by maintainers.
 
 on:
   schedule:
@@ -25,12 +21,10 @@ on:
           - minor
           - major
 
-# Only the permissions needed by this workflow.
 permissions:
   contents: write
   issues: write
 
-# Prevent overlapping release preparations.
 concurrency:
   group: weekly-release
   cancel-in-progress: false
@@ -40,7 +34,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout master instead of the nonexistent main branch.
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
@@ -52,34 +45,30 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # Find commits since the last release tag.
       - name: Check for unreleased commits
         id: unreleased
         shell: bash
         run: |
-          LAST=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo '')
+          LAST=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)
 
           if [ -z "$LAST" ]; then
-            echo "No release tag found; treating all commits as unreleased."
             COUNT=$(git rev-list --count HEAD)
           else
             COUNT=$(git rev-list --count "${LAST}..HEAD")
           fi
 
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
           echo "last=$LAST" >> "$GITHUB_OUTPUT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
           echo "Last release: ${LAST:-none}"
           echo "Unreleased commits: $COUNT"
 
-      # Stop when there is nothing to release.
       - name: Stop if there is nothing to release
         if: steps.unreleased.outputs.count == '0'
         run: |
-          echo "::notice::No unreleased commits. Nothing to prepare."
+          echo "::notice::No new commits. Nothing to release."
 
-      # Calculate the next version.
-      - name: Bump the version on a branch
+      - name: Bump the version
         if: steps.unreleased.outputs.count != '0'
         id: bump
         shell: bash
@@ -94,39 +83,42 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
 
-          echo "Preparing release: $VERSION"
+          echo "New version: $VERSION"
           echo "Release branch: $BRANCH"
 
-      # Verify that the package version was synchronized.
-      - name: Verify the build version was synced
+      - name: Verify build version
         if: steps.unreleased.outputs.count != '0'
         shell: bash
         run: |
           EXPECTED="${{ steps.bump.outputs.version }}"
 
           if ! grep -Fq "BUILD_VERSION = '$EXPECTED'" src/version.js; then
-            echo "ERROR: src/version.js was not synced to $EXPECTED"
+            echo "::error::src/version.js was not updated to $EXPECTED"
             exit 1
           fi
 
-          echo "Build version verified: $EXPECTED"
+          echo "Build version verified."
 
-      # Commit and push the release branch.
-      - name: Commit and push
+      - name: Commit and push release branch
         if: steps.unreleased.outputs.count != '0'
         shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
           BRANCH="${{ steps.bump.outputs.branch }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            echo "::error::Remote branch $BRANCH already exists. Check the previous release."
+            exit 1
+          fi
 
           git switch -c "$BRANCH"
 
-          git add package.json package-lock.json npm-shrinkwrap.json src/version.js 2>/dev/null || true
+          git add -u
 
           if git diff --cached --quiet; then
-            echo "ERROR: No version changes to commit."
+            echo "::error::No version changes were staged."
             exit 1
           fi
 
@@ -134,8 +126,7 @@ jobs:
 
           git push origin "$BRANCH"
 
-      # Assemble release notes and the correct PR comparison URL.
-      - name: Assemble the release notes
+      - name: Assemble release notes
         if: steps.unreleased.outputs.count != '0'
         id: notes
         shell: bash
@@ -158,7 +149,7 @@ jobs:
             echo
             echo "**[Open the release pull request]($COMPARE)**"
             echo
-            echo "After reviewing and merging, tag the merge commit:"
+            echo "Review and merge the PR, then tag the merge commit:"
             echo
             echo '```bash'
             echo "git checkout master"
@@ -169,8 +160,9 @@ jobs:
             echo
             echo "Merging the PR does not publish anything on its own."
             echo
-            echo "## What is in this release"
+            echo "## Release contents"
             echo
+
             if [ -n "$LAST" ]; then
               git log --no-merges --pretty='- %s' "${LAST}..HEAD"
             else
@@ -180,8 +172,7 @@ jobs:
 
           cat notes.md >> "$GITHUB_STEP_SUMMARY"
 
-      # Create an issue containing the release notes.
-      - name: File the release issue
+      - name: Create release issue
         if: steps.unreleased.outputs.count != '0'
         id: issue
         env:
@@ -195,9 +186,9 @@ jobs:
           echo "$ISSUE_URL"
           echo "url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
 
-      # Notify maintainers through Discord.
-      - name: Ping maintainers
+      - name: Notify maintainers on Discord
         if: steps.unreleased.outputs.count != '0'
+        continue-on-error: true
         timeout-minutes: 5
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MAINTAINERS_WEBHOOK }}
@@ -210,4 +201,3 @@ jobs:
             Notes and steps: ${{ steps.issue.outputs.url }}
           COLOR: '0x3498db'
         run: node scripts/discord-notify.js
-```
